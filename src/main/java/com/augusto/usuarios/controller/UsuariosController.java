@@ -38,7 +38,11 @@ public class UsuariosController {
     public ResponseEntity<UsuarioRespostaDTO> buscarPorId(@PathVariable long id){
         Optional<Usuario> usuarioData = usuarioRepository.findById(id);
 
-        return usuarioData.map(usuario -> new ResponseEntity<>(UsuarioRespostaDTO.TransformaEmDTO(usuario), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (usuarioData.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(UsuarioRespostaDTO.TransformaEmDTO(usuarioData.get()), HttpStatus.OK);
+        }
     }
 
     @GetMapping("/nomes/{nomeUsuario}")
